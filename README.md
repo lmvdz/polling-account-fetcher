@@ -23,8 +23,6 @@ If there is an issue during the rpc call it will retry 5 times before aborting
 
 ### Usage
 
-set the `RPC_URL` environment variable
-
 ```ts
 import { PollingAccountsFetcher } from 'polling-accounts-fetcher';
 
