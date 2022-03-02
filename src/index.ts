@@ -74,16 +74,16 @@ export class PollingAccountsFetcher {
 		return value[0].toUpperCase() + value.slice(1);
 	}
 
-    constructAccount(accountToPoll: AccountToPoll<any>, raw: string, dataType: BufferEncoding) : any {
+    constructAccount(accountToPoll: AccountToPoll<any>, buffer: Buffer) : any {
         if (accountToPoll.program !== undefined) {
             return accountToPoll.program.account[
                 accountToPoll.accountKey
             ].coder.accounts.decode(
                 this.capitalize(accountToPoll.accountKey),
-                Buffer.from(raw, dataType)
+                buffer
             );
         } else if (accountToPoll.constructAccount !== undefined) {
-            return accountToPoll.constructAccount(Buffer.from(raw, dataType));
+            return accountToPoll.constructAccount(buffer);
         }
     }
 
@@ -147,9 +147,9 @@ export class PollingAccountsFetcher {
                     const slot = (response as any).result.context.slot;
                     if (accountToPoll.slot === undefined || slot > accountToPoll.slot) {
                         accountToPoll.slot = slot;
-                        const raw: string = (response as any).result.value[ accIndex ].data[0];
+                        const raw = (response as any).result.value[ accIndex ].data[0] as string;
                         const dataType = (response as any).result.value[ accIndex ].data[1] as BufferEncoding;
-                        const account = this.constructAccount(accountToPoll, raw, dataType);
+                        const account = this.constructAccount(accountToPoll, Buffer.from(raw, dataType));
                         if (accountToPoll.raw !== raw) {
                             accountToPoll.data = account;
                             accountToPoll.raw = raw;

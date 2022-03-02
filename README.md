@@ -78,16 +78,16 @@ export type AccountToPoll<T> = {
 // this is how the polling account fetcher decodes the data retrieved from the RPC call
 // if the accountToPoll has an associated anchor program, use the anchor program to decode the account
 // otherwise if there is a custom decode function on the accountToPoll use that
-constructAccount(accountToPoll: AccountToPoll<any>, raw: string, dataType: BufferEncoding) : any {
+constructAccount(accountToPoll: AccountToPoll<any>, buffer: Buffer) : any {
     if (accountToPoll.program !== undefined) {
         return accountToPoll.program.account[
             accountToPoll.accountKey
         ].coder.accounts.decode(
             this.capitalize(accountToPoll.accountKey),
-            Buffer.from(raw, dataType)
+            buffer
         );
     } else if (accountToPoll.constructAccount !== undefined) {
-        return accountToPoll.constructAccount(Buffer.from(raw, dataType));
+        return accountToPoll.constructAccount(buffer);
     }
 }
 ```
