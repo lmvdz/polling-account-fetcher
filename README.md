@@ -46,7 +46,7 @@ pollingAccountsFetcher.addConstructAccount(accountPublicKey, (data: Buffer) => {
     // do something with the decodedAccountData
 }, (error) => {
     console.error(error);
-}, initialAccountData);
+}, initialAccountData?);
 
 // start the account polling
 pollingAccountsFetcher.start();
