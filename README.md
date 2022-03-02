@@ -28,8 +28,8 @@ set the `RPC_URL` environment variable
 ```ts
 import { PollingAccountsFetcher } from 'polling-accounts-fetcher';
 
-// new PollingAccountsFetcher(frequencyInMS: number, requestsPerSecond: number)
-const pollingAccountsFetcher = new PollingAccountsFetcher(1000, 5);
+// new PollingAccountsFetcher(rpcUrl: string, frequencyInMS: number, requestsPerSecond: number)
+const pollingAccountsFetcher = new PollingAccountsFetcher('https://api.mainnet-beta.solana.com', 1000, 5);
 
 // this example of adding a program account uses the 'accountKey' to decode the data received from the getMultipleAccounts rpc call
 pollingAccountsFetcher.addProgram(accountKey, accountPublicKey, Program<Idl>, (data : any) => {

@@ -28,7 +28,9 @@ export class PollingAccountsFetcher {
     frequency = 1000;
     requestsPerSecond = 5;
     interval: NodeJS.Timer;
-    constructor(frequency?: number, requestsPerSecond?: number) {
+    rpcURL: string;
+    constructor(rpcURL: string, frequency?: number, requestsPerSecond?: number) {
+        this.rpcURL = rpcURL;
         if (frequency < 0) {
             console.warn(`PollingAccountsFetcher constructor parameter frequency must be greater than or equal to 0 ms, defaulting to 1000 ms`);
         } else {
@@ -100,7 +102,7 @@ export class PollingAccountsFetcher {
                     ]
                 })
             );
-            axios.post(process.env.RPC_URL, data).then(response => {
+            axios.post(this.rpcURL, data).then(response => {
                 resolve(response.data);
             }).catch(error => {
                 if (retry < 5) {
