@@ -11,7 +11,7 @@ yarn build
 ### Overview
 
 The polling account fetcher was created in response to the GenesysGo rate limit on their previously free unlimited RPC  
-By sending 10 x 100 publickeys in one getMultipleAccounts rpc call we can theoretically reach 10k accounts per second.
+By sending 10 x 100 publickeys in one getMultipleAccounts rpc call we can theoretically reach 10k accounts per second (assuming there is a 10tps rate limit).
 
 ### How it works
 
