@@ -32,22 +32,21 @@ import { PollingAccountsFetcher } from 'polling-accounts-fetcher';
 const pollingAccountsFetcher = new PollingAccountsFetcher(1000, 5);
 
 // this example of adding a program account uses the 'accountKey' to decode the data received from the getMultipleAccounts rpc call
-pollingAccountsFetcher.addProgram(accountKey, accountPublicKey, Program<Idl>, ((data : any) => {
+pollingAccountsFetcher.addProgram(accountKey, accountPublicKey, Program<Idl>, (data : any) => {
     console.log(data);
-}), (error => {
+}, error => {
     console.error(error);
-}), initialAccountData?);
+}, initialAccountData?);
 
 //this example of adding an account but uses a custom decode function (not an anchor program)
 pollingAccountsFetcher.addConstructAccount(accountPublicKey, (data: Buffer) => {
-        // function used to parse the account buffer
-        return parseAccountBuffer(data);
-    }, async (decodedAccountData: any) => {
-        // do something with the decodedAccountData
-    }, (error) => {
-        console.error(error);
-    });
-});
+    // function used to parse the account buffer
+    return parseAccountBuffer(data);
+}, (decodedAccountData: any) => {
+    // do something with the decodedAccountData
+}, (error) => {
+    console.error(error);
+}, initialAccountData);
 
 // start the account polling
 pollingAccountsFetcher.start();
