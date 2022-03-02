@@ -1,8 +1,8 @@
 {
   "name": "polling-account-fetcher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
-  "author": "<lmvanderzande@gmail.com>",
+  "author": " <lmvanderzande@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@project-serum/anchor": "^0.22.1",
@@ -25,5 +25,17 @@
     "prettify:fix": "prettier --write './src/**/*.ts'",
     "lint": "eslint . --ext ts --quiet",
     "lint:fix": "eslint . --ext ts --fix"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lmvdz/polling-account-fetcher.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lmvdz/polling-account-fetcher/issues"
+  },
+  "homepage": "https://github.com/lmvdz/polling-account-fetcher#readme",
+  "description": ""
 }

@@ -2,22 +2,22 @@ import { Idl, Program } from "@project-serum/anchor";
 import axios from "axios";
 
 export type AccountToPoll<T> = {
-    data: T // the data 
-    raw: string
+    data: T // the latest data (account)
+    raw: string // the latest raw data retrieved
     accountKey: string // account on the anchor program (used for decoding the buffer data returned by the rpc call)
-    accountPublicKey: string
-    program: Program<Idl>
-    slot: number
-    constructAccount: (buffer: Buffer) => any
-    onFetch: (data: T) => void
-    onError: (error: any) => void
+    accountPublicKey: string // the publickey of the account
+    program: Program<Idl> // the anchor program associated with the account
+    slot: number // the latest slot from the retrieved data (to prevent updating to old data)
+    constructAccount: (buffer: Buffer) => any // used by .addConstructAccount
+    onFetch: (data: T) => void // called when new data is retrieved 
+    onError: (error: any) => void // called when there was an error
 }
 
-
+// used to chunk the the array of publickeys ( to min/max the amount of accounts per RPC call )
 export function chunk(array: Array<any>, chunk_size: number) : Array<any> {
     return new Array(Math.ceil(array.length / chunk_size)).fill(null).map((_, index) => index * chunk_size).map(begin => array.slice(begin, begin + chunk_size));
 }
-
+// used to flatten the array of chunked responses
 export function flat(arr: Array<any>, d = 1) : Array<any> {
     return d > 0 ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? flat(val, d - 1) : val), []) : arr.slice();
 }
@@ -85,7 +85,6 @@ export class PollingAccountsFetcher {
         } else if (accountToPoll.constructAccount !== undefined) {
             return accountToPoll.constructAccount(Buffer.from(raw, dataType));
         }
-        
     }
 
     axiosPost(requestChunk, retry = 0) : Promise<any> {
