@@ -23,12 +23,14 @@ export function flat(arr: Array<any>, d = 1) : Array<any> {
 }
 
 export class PollingAccountsFetcher {
+
     accounts: Map<string, AccountToPoll<any>>;
     MAX_KEYS = 100;
     frequency = 1000;
     requestsPerSecond = 5;
     interval: NodeJS.Timer;
     rpcURL: string;
+
     constructor(rpcURL: string, frequency?: number, requestsPerSecond?: number) {
         this.rpcURL = rpcURL;
         if (frequency < 0) {
