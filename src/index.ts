@@ -33,16 +33,19 @@ export class PollingAccountsFetcher {
 
     constructor(rpcURL: string, frequency?: number, requestsPerSecond?: number) {
         this.rpcURL = rpcURL;
-        if (frequency < 0) {
-            console.warn(`PollingAccountsFetcher constructor parameter frequency must be greater than or equal to 0 ms, defaulting to 1000 ms`);
-        } else {
-            this.frequency = frequency;
+        if (frequency !== undefined) {
+            if (frequency < 0) {
+                console.warn(`PollingAccountsFetcher constructor parameter frequency must be greater than or equal to 0 ms, defaulting to 1000 ms`);
+            } else {
+                this.frequency = frequency;
+            }
         }
-        
-        if (requestsPerSecond < 1) {
-            console.warn(`PollingAccountsFetcher constructor parameter requestsPerSecond must be greater than or eqaul to 1, defaulting to 5 rps`);
-        } else {
-            this.requestsPerSecond = requestsPerSecond;
+        if (requestsPerSecond !== undefined) {
+            if (requestsPerSecond < 1) {
+                console.warn(`PollingAccountsFetcher constructor parameter requestsPerSecond must be greater than or eqaul to 1, defaulting to 5 rps`);
+            } else {
+                this.requestsPerSecond = requestsPerSecond;
+            }
         }
         this.accounts = new Map<string, AccountToPoll<any>>();
     }
