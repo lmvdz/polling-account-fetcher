@@ -1,6 +1,6 @@
 {
   "name": "polling-account-fetcher",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "lib/index.js",
   "author": " <lmvanderzande@gmail.com>",
   "license": "MIT",

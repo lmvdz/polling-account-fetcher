@@ -21,6 +21,12 @@ The `PollingAccountFetcher.fetch()` is called by `setInterval(() => {}, frequenc
 Once all the data is returned, the pollingAccountFetcher will parse each returned account data and send the data back through the AccountToPoll's `onFetch(data: any) => void` callback  
 If there is an issue during the rpc call it will retry 5 times before aborting
 
+
+### Install
+
+`yarn add polling-account-fetcher`
+
+
 ### Usage
 
 ```ts
