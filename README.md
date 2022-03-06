@@ -24,7 +24,7 @@ If there is an issue during the rpc call it will retry 5 times before aborting
 ### Usage
 
 ```ts
-import { PollingAccountsFetcher } from 'polling-accounts-fetcher';
+import { PollingAccountsFetcher } from 'polling-account-fetcher';
 
 // new PollingAccountsFetcher(rpcUrl: string, frequencyInMS: number, requestsPerSecond: number)
 const pollingAccountsFetcher = new PollingAccountsFetcher('https://api.mainnet-beta.solana.com', 1000, 5);
