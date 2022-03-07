@@ -15,7 +15,7 @@ By sending 10 x 100 publickeys in one getMultipleAccounts rpc call we can theore
 
 ### How it works
 
-Depending on if you are using a anchor program or a custom decoding function you can add a public key to the accounts map via the provided `addProgram` or `addConstrucAccount` methods.  
+Depending on if you are using a anchor program or a custom decoding function you can add a public key to the accounts map via the provided `addProgram` or `addConstructAccount` methods.  
 For example PythNetwork's javascript client doesn't use an Anchor Program/IDL, but does provide a function to decode the PythPriceData.  
 The PollingAccountFetcher constructor takes two parameters: `frequency` ( in milliseconds ) and `requestsPerSecond`  
 The `PollingAccountFetcher.fetch()` is called by `setInterval(() => {}, frequency)`  
