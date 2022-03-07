@@ -1,5 +1,5 @@
 # polling-account-fetcher
-Polls solana accounts (program and custom decode)
+Fetch Solana Accounts on an interval while keeping the amount of requests under the rate limit of the RPC
 
 ### Building from source
 
