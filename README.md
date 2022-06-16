@@ -1,5 +1,5 @@
 # polling-account-fetcher
-Polls solana accounts (program and custom decode)
+Fetch Solana Accounts on an interval while keeping the amount of requests under the rate limit of the RPC
 
 ### Building from source
 
@@ -15,7 +15,8 @@ By sending 10 x 100 publickeys in one getMultipleAccounts rpc call we can theore
 
 ### How it works
 
-Depending on if you are using a anchor program or a custom decoding function you can add a public key to the accounts map via the provided `addProgram` or `addConstrucAccount` methods.  
+Depending on if you are using a anchor program or a custom decoding function you can add a public key to the accounts map via the provided `addProgram` or `addConstructAccount` methods.  
+For example PythNetwork's javascript client doesn't use an Anchor Program/IDL, but does provide a function to decode the PythPriceData.  
 The PollingAccountFetcher constructor takes two parameters: `frequency` ( in milliseconds ) and `requestsPerSecond`  
 The `PollingAccountFetcher.fetch()` is called by `setInterval(() => {}, frequency)`  
 Once all the data is returned, the pollingAccountFetcher will parse each returned account data and send the data back through the AccountToPoll's `onFetch(data: any) => void` callback  
