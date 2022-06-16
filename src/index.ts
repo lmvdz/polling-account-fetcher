@@ -1,5 +1,5 @@
 import { Idl, Program } from "@project-serum/anchor";
-import axios from "axios";
+import { request } from 'undici';
 
 export type AccountToPoll<T> = {
     data: T // the latest data (account)
@@ -94,7 +94,7 @@ export class PollingAccountsFetcher {
         }
     }
 
-    axiosPost(requestChunk, retry = 0) : Promise<any> {
+    post(requestChunk, retry = 0) : Promise<any> {
         return new Promise((resolve) => {
             const data = requestChunk.map(payload => 
                 ({
@@ -107,11 +107,9 @@ export class PollingAccountsFetcher {
                     ]
                 })
             );
-            axios.post(this.rpcURL, data).then(response => {
-                resolve(response.data);
-            }).catch(error => {
+            request(this.rpcURL, { body: data, method: 'POST'}).then(response => response.body.json()).then(data => resolve(data)).catch(error => {
                 if (retry < 5) {
-                    this.axiosPost(requestChunk, retry+1);
+                    this.post(requestChunk, retry+1);
                 } else {
                     console.error(error);
                     console.warn('failed to retrieve data 5 times in a row, aborting');
@@ -130,7 +128,7 @@ export class PollingAccountsFetcher {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     Promise.all(request.map((requestChunk) => {
-                        return this.axiosPost(requestChunk);
+                        return this.post(requestChunk);
                     })).then(promisedResponses => {
                         resolve(flat(promisedResponses, Infinity));
                     });
