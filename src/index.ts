@@ -1,12 +1,12 @@
 import { Idl, Program } from "@project-serum/anchor";
-import { request } from 'undici';
+import axios from 'axios';
 
 export type AccountToPoll<T> = {
     data: T // the latest data (account)
     raw: string // the latest raw data retrieved
     accountKey: string // account on the anchor program (used for decoding the buffer data returned by the rpc call)
     accountPublicKey: string // the publickey of the account
-    program: Program<Idl> // the anchor program associated with the account
+    program: Program<any> // the anchor program associated with the account
     slot: number // the latest slot from the retrieved data (to prevent updating to old data)
     constructAccount: (buffer: Buffer) => any // used by .addConstructAccount
     onFetch: (data: T) => void // called when new data is retrieved 
@@ -107,7 +107,7 @@ export class PollingAccountsFetcher {
                     ]
                 })
             );
-            request(this.rpcURL, { body: data, method: 'POST'}).then(response => response.body.json()).then(data => resolve(data)).catch(error => {
+            axios.post(this.rpcURL, data).then(response => resolve(response.data)).catch(error => {
                 if (retry < 5) {
                     this.post(requestChunk, retry+1);
                 } else {
