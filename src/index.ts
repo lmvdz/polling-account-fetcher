@@ -1,12 +1,12 @@
 import { Idl, Program } from "@project-serum/anchor";
 import axios from 'axios';
 
-export type AccountToPoll<T> = {
+export type AccountToPoll<T, U extends Idl> = {
     data: T // the latest data (account)
     raw: string // the latest raw data retrieved
     accountKey: string // account on the anchor program (used for decoding the buffer data returned by the rpc call)
     accountPublicKey: string // the publickey of the account
-    program: Program<any> // the anchor program associated with the account
+    program: Program<U> // the anchor program associated with the account
     slot: number // the latest slot from the retrieved data (to prevent updating to old data)
     constructAccount: (buffer: Buffer) => any // used by .addConstructAccount
     onFetch: (data: T) => void // called when new data is retrieved 
@@ -24,7 +24,7 @@ export function flat(arr: Array<any>, d = 1) : Array<any> {
 
 export class PollingAccountsFetcher {
 
-    accounts: Map<string, AccountToPoll<any>>;
+    accounts: Map<string, AccountToPoll<any, any>>;
     MAX_KEYS = 100;
     frequency = 1000;
     requestsPerSecond = 5;
@@ -47,18 +47,18 @@ export class PollingAccountsFetcher {
                 this.requestsPerSecond = requestsPerSecond;
             }
         }
-        this.accounts = new Map<string, AccountToPoll<any>>();
+        this.accounts = new Map<string, AccountToPoll<any, any>>();
     }
 
-    addProgram(accountKey: string, accountPublicKey: string, program: Program<Idl>, onFetch: (data: any) => void, onError: (error: any) => void, data?: any) {
+    addProgram<T extends Idl>(accountKey: string, accountPublicKey: string, program: Program<T>, onFetch: (data: any) => void, onError: (error: any) => void, data?: any) {
         if (!this.accounts.has(accountPublicKey)) {
-            this.accounts.set(accountPublicKey, { accountKey, accountPublicKey, program, onFetch, onError, data } as AccountToPoll<any>);
+            this.accounts.set(accountPublicKey, { accountKey, accountPublicKey, program, onFetch, onError, data } as AccountToPoll<any, T>);
         }
     }
 
     addConstructAccount(accountPublicKey: string, constructAccount: (data: any) => any, onFetch: (data: any) => void, onError: (error: any) => void, data?: any) {
         if (!this.accounts.has(accountPublicKey)) {
-            this.accounts.set(accountPublicKey, { accountPublicKey, constructAccount, onFetch, onError, data } as AccountToPoll<any>);
+            this.accounts.set(accountPublicKey, { accountPublicKey, constructAccount, onFetch, onError, data } as AccountToPoll<any, any>);
         }
     }
 
@@ -81,12 +81,12 @@ export class PollingAccountsFetcher {
 		return value[0].toUpperCase() + value.slice(1);
 	}
 
-    constructAccount(accountToPoll: AccountToPoll<any>, buffer: Buffer) : any {
+    constructAccount(accountToPoll: AccountToPoll<any, any>, buffer: Buffer) : any {
         if (accountToPoll.program !== undefined) {
             return accountToPoll.program.account[
                 accountToPoll.accountKey
             ].coder.accounts.decode(
-                this.capitalize(accountToPoll.accountKey),
+                accountToPoll.accountKey,
                 buffer
             );
         } else if (accountToPoll.constructAccount !== undefined) {
